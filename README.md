@@ -1,6 +1,4 @@
-# Paddy-Doctor-Paddy-Disease-Classification
-
-# Paddy Doctor 🌾🩺
+# Paddy-Doctor-Paddy-Disease-Classification 🌾🩺
 
 **Paddy Doctor** is an innovative solution to automate disease identification in paddy farming, a crucial step in mitigating yield losses caused by pests and diseases. With the ability to identify diseases and pests using advanced image processing and deep learning techniques, this tool aims to empower farmers with accessible decision-support tools for effective crop protection.
 
