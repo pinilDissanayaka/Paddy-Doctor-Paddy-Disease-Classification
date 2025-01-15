@@ -64,13 +64,13 @@ Diseases and pests can lead to up to **70% loss** in total paddy yield, posing a
 - GPU support for faster processing (optional)
 
 ### Installation
-1. Clone the repository:  
-   ```
-   git clone https://github.com/yourusername/paddy-doctor.git
-   cd paddy-doctor
-   '''
+1. Clone the repository:
+```
+   git https://github.com/pinilDissanayaka/Paddy-Doctor-Paddy-Disease-Classification.git
+   cd Paddy-Doctor-Paddy-Disease-Classification
+```
 
-2. Set up a virtual environment and install dependencies:
+3. Set up a virtual environment and install dependencies:
 ```
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
