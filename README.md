@@ -43,7 +43,7 @@ Diseases and pests can lead to up to **70% loss** in total paddy yield, posing a
 ## 📈 **Accuracy Metrics**
 ![download](https://github.com/user-attachments/assets/6d17119c-ce54-4743-a565-3d29b94cf7ef)
 ![download (1)](https://github.com/user-attachments/assets/33f49cfc-0025-4558-80e4-9bbe91249a0a)
-![download](https://github.com/user-attachments/assets/88e77881-0036-480f-ac0c-b93e916c2985)
+![download (2)](https://github.com/user-attachments/assets/f7533b7e-9e3b-466a-b148-aeba286c84ca)
 
 ---
 
