@@ -1,0 +1,764 @@
+{% extends "base.html" %}
+
+{% block head%}
+<title>AGRISAGE / Device - {{ deviceID }}</title>
+{% endblock%}
+
+{% block main%}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>IoT Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">IoT Device - {{ deviceID }}</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  {% if iotData %}
+    <section class="section dashboard">
+      <div class="col-lg-12">
+        <div class="row">
+          <!-- User Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card">
+              <div class="card-body">
+                <h5 class="card-title">Device ID<span></span></h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-cpu"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ deviceID }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End User Card -->
+
+          <!-- humidity Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card">
+              <div class="card-body">
+                <h5 class="card-title">Humidity<span></span></h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-droplet"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ iotData['humidity'][-1] }} % </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End humidity Card -->
+
+          <!-- Temperature Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card">
+              <div class="card-body">
+                <h5 class="card-title">Temperature<span></span></h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-thermometer"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ iotData['temperature'][-1] }}&#176;C</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Temperature Card -->
+        </div>
+      </div>
+      <!-- End Left side columns -->
+
+      <!-- IoT Owerview -->
+      <div class="col-12">
+        <!-- Soil Condition Chart-->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Soil Nutrients<span></span></h5>
+            <div id="soilConditionChart"></div>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#soilConditionChart"), {
+                    series: [{
+                      name: 'Nitrogen Level (mg/kg)',
+                      data: {{ iotData['nitrogen'] | tojson }},
+                    }, {
+                      name: 'Potassium Level (mg/kg)',
+                      data: {{ iotData['potassium'] | tojson }}
+                    }, {
+                      name: 'Phosphorus Level (mg/kg)',
+                      data: {{ iotData['phosphorus'] | tojson }}
+                    }],
+                    chart: {
+                      height: 350,
+                      type: 'area',
+                      toolbar: {
+                        show: true
+                      },
+                    },
+                    markers: {
+                      size: 4
+                    },
+                    colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                    fill: {
+                      type: "gradient",
+                      gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.4,
+                        stops: [0, 90, 100]
+                      }
+                    },
+                    dataLabels: {
+                      enabled: true
+                    },
+                    stroke: {
+                      curve: 'smooth',
+                      width: 2
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                      categories: {{ iotData['date'] | tojson }}
+                    },
+                    tooltip: {
+                      x: {
+                        format: 'dd/MM/yy HH:mm'
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Soil Condition Chart -->
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Temperature<span></span></h5>
+            <!-- Temperature Chart -->
+            <div id="temperatureChart"></div>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#temperatureChart"), {
+                    series: [{
+                      name: 'Temperature',
+                      data: {{ iotData['temperature'] | tojson }},
+                    }],
+                    chart: {
+                      height: 350,
+                      type: 'area',
+                      toolbar: {
+                        show: true
+                      },
+                    },
+                    markers: {
+                      size: 4
+                    },
+                    colors: ['#FF0000'],
+                    fill: {
+                      type: "gradient",
+                      gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.4,
+                        stops: [0, 90, 100]
+                      }
+                    },
+                    dataLabels: {
+                      enabled: true
+                    },
+                    stroke: {
+                      curve: 'smooth',
+                      width: 2
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                      categories: {{ iotData['date'] | tojson }}
+                    },
+                    tooltip: {
+                      x: {
+                        format: 'dd/MM/yy HH:mm'
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Temperature Chart -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Left side columns -->
+        <div class="col-lg-6">
+          <div class="row">
+            <!-- Water Level Meter -->
+            <div class="col-12" id="waterLevelMeter">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Water Level<span></span></h5>
+                  <div class="row">
+                    <!-- Left -->
+                    <div class="col-md-6">
+                      <div id="water-level-meter">
+                        <script>
+                          var waterLevelMeter = new FluidMeter();
+                          waterLevelMeter.init({
+                            targetContainer: document.getElementById("water-level-meter"),
+                            fillPercentage: 0,
+                            options: {
+                              fontSize: "30px",
+                              drawPercentageSign: true,
+                              drawBubbles: false,
+                              size: 280,
+                              borderWidth: 19,
+                              backgroundColor: "#e2e2e2",
+                              foregroundColor: "#fafafa",
+                              foregroundFluidLayer: {
+                                fillStyle: "#16E1FF",
+                                angularSpeed: 30,
+                                maxAmplitude: 5,
+                                frequency: 30,
+                                horizontalSpeed: -20
+                              },
+                              backgroundFluidLayer: {
+                                fillStyle: "#4F8FC6",
+                                angularSpeed: 100,
+                                maxAmplitude: 3,
+                                frequency: 22,
+                                horizontalSpeed: 20
+                              }
+                            }
+                          });
+          
+                          waterLevelMeter.setPercentage(Number({{ iotData['waterLevel'][-1] | tojson }}))
+          
+          
+                          function FluidMeter() {
+                            var context;
+                            var targetContainer;
+                          
+                            var time = null;
+                            var dt = null;
+                          
+                            var options = {
+                              drawShadow: true,
+                              drawText: true,
+                              drawPercentageSign: true,
+                              drawBubbles: true,
+                              fontSize: "70px",
+                              fontFamily: "Arial",
+                              fontFillStyle: "white",
+                              size: 300,
+                              borderWidth: 25,
+                              backgroundColor: "#e2e2e2",
+                              foregroundColor: "#fafafa"
+                            };
+                          
+                            var currentFillPercentage = 0;
+                            var fillPercentage = 0;
+                          
+                            //#region fluid context values
+                            var foregroundFluidLayer = {
+                              fillStyle: "purple",
+                              angle: 0,
+                              horizontalPosition: 0,
+                              angularSpeed: 0,
+                              maxAmplitude: 9,
+                              frequency: 30,
+                              horizontalSpeed: -150,
+                              initialHeight: 0
+                            };
+                          
+                            var backgroundFluidLayer = {
+                              fillStyle: "pink",
+                              angle: 0,
+                              horizontalPosition: 0,
+                              angularSpeed: 140,
+                              maxAmplitude: 12,
+                              frequency: 40,
+                              horizontalSpeed: 150,
+                              initialHeight: 0
+                            };
+                          
+                            var bubblesLayer = {
+                              bubbles: [],
+                              amount: 12,
+                              speed: 20,
+                              current: 0,
+                              swing: 0,
+                              size: 2,
+                              reset: function (bubble) {
+                                // calculate the area where to spawn the bubble based on the fluid area
+                                var meterBottom = (options.size - (options.size - getMeterRadius()) / 2) - options.borderWidth;
+                                var fluidAmount = currentFillPercentage * (getMeterRadius() - options.borderWidth * 2) / 100;
+                          
+                                bubble.r = random(this.size, this.size * 2) / 2;
+                                bubble.x = random(0, options.size);
+                                bubble.y = random(meterBottom, meterBottom - fluidAmount);
+                                bubble.velX = 0;
+                                bubble.velY = random(this.speed, this.speed * 2);
+                                bubble.swing = random(0, 2 * Math.PI);
+                              },
+                              init() {
+                                for (var i = 0; i < this.amount; i++) {
+                          
+                                  var meterBottom = (options.size - (options.size - getMeterRadius()) / 2) - options.borderWidth;
+                                  var fluidAmount = currentFillPercentage * (getMeterRadius() - options.borderWidth * 2) / 100;
+                                  this.bubbles.push({
+                                    x: random(0, options.size),
+                                    y: random(meterBottom, meterBottom - fluidAmount),
+                                    r: random(this.size, this.size * 2) / 2,
+                                    velX: 0,
+                                    velY: random(this.speed, this.speed * 2)
+                                  });
+                                }
+                              }
+                            }
+                            //#endregion
+                          
+                            /**
+                              * initializes and mount the canvas element on the document
+                              */
+                            function setupCanvas() {
+                              var canvas = document.createElement('canvas');
+                              canvas.width = options.size;
+                              canvas.height = options.size;
+                              canvas.imageSmoothingEnabled = true;
+                              context = canvas.getContext("2d");
+                              targetContainer.appendChild(canvas);
+                          
+                              // shadow is not required  to be on the draw loop
+                              //#region shadow
+                              if (options.drawShadow) {
+                                context.save();
+                                context.beginPath();
+                                context.filter = "drop-shadow(0px 4px 6px rgba(0,0,0,0.1))";
+                                context.arc(options.size / 2, options.size / 2, getMeterRadius() / 2, 0, 2 * Math.PI);
+                                context.closePath();
+                                context.fill();
+                                context.restore();
+                              }
+                              //#endregion
+                            }
+                          
+                            /**
+                              * draw cycle
+                              */
+                            function draw() {
+                              var now = new Date().getTime();
+                              dt = (now - (time || now)) / 1000;
+                              time = now;
+                          
+                              requestAnimationFrame(draw);
+                              context.clearRect(0, 0, options.size, options.size);
+                              drawMeterBackground();
+                              drawFluid(dt);
+                              if (options.drawText) {
+                                drawText();
+                              }
+                              drawMeterForeground();
+                            }
+                          
+                            function drawMeterBackground() {
+                              context.save();
+                              context.fillStyle = options.backgroundColor;
+                              context.beginPath();
+                              context.arc(options.size / 2, options.size / 2, getMeterRadius() / 2 - options.borderWidth, 0, 2 * Math.PI);
+                              context.closePath();
+                              context.fill();
+                              context.restore();
+                            }
+                          
+                            function drawMeterForeground() {
+                              context.save();
+                              context.lineWidth = options.borderWidth;
+                              context.strokeStyle = options.foregroundColor;
+                              context.beginPath();
+                              context.arc(options.size / 2, options.size / 2, getMeterRadius() / 2 - options.borderWidth / 2, 0, 2 * Math.PI);
+                              context.closePath();
+                              context.stroke();
+                              context.restore();
+                            }
+                            /**
+                              * draws the fluid contents of the meter
+                              * @param  {} dt elapsed time since last frame
+                              */
+                            function drawFluid(dt) {
+                              context.save();
+                              context.arc(options.size / 2, options.size / 2, getMeterRadius() / 2 - options.borderWidth, 0, Math.PI * 2);
+                              context.clip();
+                              drawFluidLayer(backgroundFluidLayer, dt);
+                              drawFluidLayer(foregroundFluidLayer, dt);
+                              if (options.drawBubbles) {
+                                drawFluidMask(foregroundFluidLayer, dt);
+                                drawBubblesLayer(dt);
+                              }
+                              context.restore();
+                            }
+                          
+                          
+                            /**
+                              * draws the foreground fluid layer
+                              * @param  {} dt elapsed time since last frame
+                              */
+                            function drawFluidLayer(layer, dt) {
+                              // calculate wave angle
+                              if (layer.angularSpeed > 0) {
+                                layer.angle += layer.angularSpeed * dt;
+                                layer.angle = layer.angle < 0 ? layer.angle + 360 : layer.angle;
+                              }
+                          
+                              // calculate horizontal position
+                              layer.horizontalPosition += layer.horizontalSpeed * dt;
+                              if (layer.horizontalSpeed > 0) {
+                                layer.horizontalPosition > Math.pow(2, 53) ? 0 : layer.horizontalPosition;
+                              }
+                              else if (layer.horizontalPosition < 0) {
+                                layer.horizontalPosition < -1 * Math.pow(2, 53) ? 0 : layer.horizontalPosition;
+                              }
+                          
+                              var x = 0;
+                              var y = 0;
+                              var amplitude = layer.maxAmplitude * Math.sin(layer.angle * Math.PI / 180);
+                          
+                              var meterBottom = (options.size - (options.size - getMeterRadius()) / 2) - options.borderWidth;
+                              var fluidAmount = currentFillPercentage * (getMeterRadius() - options.borderWidth * 2) / 100;
+                          
+                              if (currentFillPercentage < fillPercentage) {
+                                currentFillPercentage += 15 * dt;
+                              } else if (currentFillPercentage > fillPercentage) {
+                                currentFillPercentage -= 15 * dt;
+                              }
+                          
+                              layer.initialHeight = meterBottom - fluidAmount;
+                          
+                              context.save();
+                              context.beginPath();
+                          
+                              context.lineTo(0, layer.initialHeight);
+                          
+                              while (x < options.size) {
+                                y = layer.initialHeight + amplitude * Math.sin((x + layer.horizontalPosition) / layer.frequency);
+                                context.lineTo(x, y);
+                                x++;
+                              }
+                          
+                              context.lineTo(x, options.size);
+                              context.lineTo(0, options.size);
+                              context.closePath();
+                          
+                              context.fillStyle = layer.fillStyle;
+                              context.fill();
+                              context.restore();
+                            }
+                          
+                            /**
+                              * clipping mask for objects within the fluid constrains
+                              * @param {Object} layer layer to be used as a mask
+                              */
+                            function drawFluidMask(layer) {
+                              var x = 0;
+                              var y = 0;
+                              var amplitude = layer.maxAmplitude * Math.sin(layer.angle * Math.PI / 180);
+                          
+                              context.beginPath();
+                          
+                              context.lineTo(0, layer.initialHeight);
+                          
+                              while (x < options.size) {
+                                y = layer.initialHeight + amplitude * Math.sin((x + layer.horizontalPosition) / layer.frequency);
+                                context.lineTo(x, y);
+                                x++;
+                              }
+                              context.lineTo(x, options.size);
+                              context.lineTo(0, options.size);
+                              context.closePath();
+                              context.clip();
+                            }
+                          
+                            function drawBubblesLayer(dt) {
+                              context.save();
+                              for (var i = 0; i < bubblesLayer.bubbles.length; i++) {
+                                var bubble = bubblesLayer.bubbles[i];
+                          
+                                context.beginPath();
+                                context.strokeStyle = 'white';
+                                context.arc(bubble.x, bubble.y, bubble.r, 2 * Math.PI, false);
+                                context.stroke();
+                                context.closePath();
+                          
+                                var currentSpeed = bubblesLayer.current * dt;
+                          
+                                bubble.velX = Math.abs(bubble.velX) < Math.abs(bubblesLayer.current) ? bubble.velX + currentSpeed : bubblesLayer.current;
+                                bubble.y = bubble.y - bubble.velY * dt;
+                                bubble.x = bubble.x + (bubblesLayer.swing ? 0.4 * Math.cos(bubblesLayer.swing += 0.03) * bubblesLayer.swing : 0) + bubble.velX * 0.5;
+                          
+                                // determine if current bubble is outside the safe area
+                                var meterBottom = (options.size - (options.size - getMeterRadius()) / 2) - options.borderWidth;
+                                var fluidAmount = currentFillPercentage * (getMeterRadius() - options.borderWidth * 2) / 100;
+                          
+                                if (bubble.y <= meterBottom - fluidAmount) {
+                                  bubblesLayer.reset(bubble);
+                                }
+                          
+                              }
+                              context.restore();
+                            }
+                          
+                            function drawText() {
+                          
+                              var text = options.drawPercentageSign ?
+                                currentFillPercentage.toFixed(0) + "%" : currentFillPercentage.toFixed(0);
+                          
+                              context.save();
+                              context.font = getFontSize();
+                              context.fillStyle = options.fontFillStyle;
+                              context.textAlign = "center";
+                              context.textBaseline = 'middle';
+                              context.filter = "drop-shadow(0px 0px 5px rgba(0,0,0,0.4))"
+                              context.fillText(text, options.size / 2, options.size / 2);
+                              context.restore();
+                            }
+                          
+                            //#region helper methods
+                            function clamp(number, min, max) {
+                              return Math.min(Math.max(number, min), max);
+                            };
+                            function getMeterRadius() {
+                              return options.size * 0.9;
+                            }
+                          
+                            function random(min, max) {
+                              var delta = max - min;
+                              return max === min ? min : Math.random() * delta + min;
+                            }
+                          
+                            function getFontSize() {
+                              return options.fontSize + " " + options.fontFamily;
+                            }
+                            //#endregion
+                          
+                            return {
+                              init: function (env) {
+                                if (!env.targetContainer)
+                                  throw "empty or invalid container";
+                          
+                                targetContainer = env.targetContainer;
+                                fillPercentage = clamp(env.fillPercentage, 0, 100);
+                          
+                                if (env.options) {
+                                  options.drawShadow = env.options.drawShadow === false ? false : true;
+                                  options.size = env.options.size;
+                                  options.drawBubbles = env.options.drawBubbles === false ? false : true;
+                                  options.borderWidth = env.options.borderWidth || options.borderWidth;
+                                  options.foregroundFluidColor = env.options.foregroundFluidColor || options.foregroundFluidColor;
+                                  options.backgroundFluidColor = env.options.backgroundFluidColor || options.backgroundFluidColor;
+                                  options.backgroundColor = env.options.backgroundColor || options.backgroundColor;
+                                  options.foregroundColor = env.options.foregroundColor || options.foregroundColor;
+                          
+                                  options.drawText = env.options.drawText === false ? false : true;
+                                  options.drawPercentageSign = env.options.drawPercentageSign === false ? false : true;
+                                  options.fontSize = env.options.fontSize || options.fontSize;
+                                  options.fontFamily = env.options.fontFamily || options.fontFamily;
+                                  options.fontFillStyle = env.options.fontFillStyle || options.fontFillStyle;
+                                  // fluid settings
+                          
+                                  if (env.options.foregroundFluidLayer) {
+                                    foregroundFluidLayer.fillStyle = env.options.foregroundFluidLayer.fillStyle || foregroundFluidLayer.fillStyle;
+                                    foregroundFluidLayer.angularSpeed = env.options.foregroundFluidLayer.angularSpeed || foregroundFluidLayer.angularSpeed;
+                                    foregroundFluidLayer.maxAmplitude = env.options.foregroundFluidLayer.maxAmplitude || foregroundFluidLayer.maxAmplitude;
+                                    foregroundFluidLayer.frequency = env.options.foregroundFluidLayer.frequency || foregroundFluidLayer.frequency;
+                                    foregroundFluidLayer.horizontalSpeed = env.options.foregroundFluidLayer.horizontalSpeed || foregroundFluidLayer.horizontalSpeed;
+                                  }
+                          
+                                  if (env.options.backgroundFluidLayer) {
+                                    backgroundFluidLayer.fillStyle = env.options.backgroundFluidLayer.fillStyle || backgroundFluidLayer.fillStyle;
+                                    backgroundFluidLayer.angularSpeed = env.options.backgroundFluidLayer.angularSpeed || backgroundFluidLayer.angularSpeed;
+                                    backgroundFluidLayer.maxAmplitude = env.options.backgroundFluidLayer.maxAmplitude || backgroundFluidLayer.maxAmplitude;
+                                    backgroundFluidLayer.frequency = env.options.backgroundFluidLayer.frequency || backgroundFluidLayer.frequency;
+                                    backgroundFluidLayer.horizontalSpeed = env.options.backgroundFluidLayer.horizontalSpeed || backgroundFluidLayer.horizontalSpeed;
+                                  }
+                                }
+                                bubblesLayer.init();
+                                setupCanvas();
+                                draw();
+                              },
+                              setPercentage(percentage) {
+                                fillPercentage = clamp(percentage, 0, 100);
+                              }
+                            }
+                          };
+                        </script>
+                      </div>
+                    </div>
+                    <!-- Right -->
+                    <div class="col-md-6">
+                      <form action="#" method="POST" novalidate>
+                        <div class="col-sm-10">
+                          <div>
+                            <label for="range" class="form-label">Threshold value : <output id="value"></output> %</label>
+                            <input type="range" class="form-range" min="0" max="100" step="1" id="range">
+                            <script>
+                              const value = document.querySelector("#value");
+                              const input = document.querySelector("#range");
+                              value.textContent = input.value;
+                              input.addEventListener("input", (event) => {
+                                value.textContent = event.target.value;
+                              });
+                            </script>
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <button type="submit" class="btn btn-primary">Set</button>
+                          <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            <!--End Water Level Meter -->
+
+            <!-- Top Selling -->
+            <div class="col-12">
+              
+            </div><!-- End Top Selling -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-6">
+          <!-- Soil Moisture Chart -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Soil Nutrients<span></span></h5>
+              <div id="soilMoistureChart"></div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    new ApexCharts(document.querySelector("#soilMoistureChart"), {
+                      series: [{
+                        name: 'Nitrogen Level',
+                        data: {{ iotData['soilMoisture'] | tojson }},
+                      }],
+                      chart: {
+                        height: 350,
+                        type: 'area',
+                        toolbar: {
+                          show: true
+                        },
+                      },
+                      markers: {
+                        size: 4
+                      },
+                      colors: ['#0000FF'],
+                      fill: {
+                        type: "gradient",
+                        gradient: {
+                          shadeIntensity: 1,
+                          opacityFrom: 0.3,
+                          opacityTo: 0.4,
+                          stops: [0, 90, 100]
+                        }
+                      },
+                      dataLabels: {
+                        enabled: true
+                      },
+                      stroke: {
+                        curve: 'smooth',
+                        width: 2
+                      },
+                      xaxis: {
+                        type: 'datetime',
+                        categories: {{ iotData['date'] | tojson }}
+                      },
+                      tooltip: {
+                        x: {
+                          format: 'dd/MM/yy HH:mm'
+                        },
+                      }
+                    }).render();
+                  });
+                </script>
+                <!-- End Soil Moisture Chart -->
+              </div>
+            </div>
+          </div>
+        </div><!-- End Right side columns -->
+      </div>
+    </section>
+  {% else %}
+    <section class="section dashboard">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><strong>Device {{ deviceID }} Not Found !</strong></h5>
+              <div>
+                <h6>We couldn't locate the IoT device you're looking for. Please try the following steps:</h6>
+                <ol>
+                  <li>Ensure Device is Powered On: Check that your device is properly connected to a power source.</li>
+                  <li>Check Network Connection: Verify that your device is connected to your Wi-Fi or Ethernet network.</li>
+                  <li>Refresh Page: Sometimes, a simple refresh can help.</li>
+                  <li>Move Closer: Ensure the device is within range of your network and free from obstructions.</li>
+                  <li>Restart Device: Power off your device, wait a few seconds, and power it back on.</li>
+                  <li>Update Firmware: Make sure your device firmware is up to date.</li>
+                  <li>Check App Settings: Confirm that the app or platform you're using is correctly set up and up to date.</li>
+                </ol>
+                <p>If these steps don’t resolve the issue, please contact our support team.<p>
+                <h1>Contact Support:</h1>
+                <ul>
+                  <li>Email: support@example.com</li>
+                  <li>Phone: 1-800-123-4567</li>
+                  <li>Live Chat: Start Chat</li>
+                </ul>
+                <p>Thank you for your patience!</p>
+              </div>
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteDeviceModal">Delete Device</button>
+              <a role="button" class="btn btn-warning" href="{{url_for('editIoTDevice', deviceID=deviceID)}}">Edit Device</a>
+              <a role="button" class="btn btn-success" href="javascript: location.reload();">Refresh Page</a>
+
+              <div class="modal fade" id="deleteDeviceModal" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Delete Device Confirmation</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <h6><strong>Are you sure you want to delete this device?</strong></h6>
+                      <ul>
+                        <li>Device ID: {{ deviceID }}</li>
+                      </ul>
+                      <h6>Deleting this device will remove it permanently from your account. This action cannot be undone.</h6>
+                      <h6><strong>Do you wish to proceed?</strong></h6>
+                    </div>
+                    <div class="modal-footer">
+                      <form action="{{ url_for("deleteIoTDevice", deviceID=deviceID)}}" method="POST">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Delete Modal-->
+            </div>
+          </div>
+    </section>
+
+    {% endif %}
+</main>
+  <!-- End main -->
+{% endblock  %}

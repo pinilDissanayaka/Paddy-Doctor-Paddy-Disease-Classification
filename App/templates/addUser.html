@@ -1,0 +1,91 @@
+{% extends "adminBase.html" %}
+
+{% block head %}
+<title>AGRISAGE / Add User</title>
+{% endblock%}
+
+
+{% block main %}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Add User</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/adminDashboard">Home</a></li>
+        <li class="breadcrumb-item active">Add User</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <form novalidate action="{{ url_for("addUser")}}" method="POST">
+      <div class="row mb-3">
+        <label for="yourName" class="col-sm-2 col-form-label">Your Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="yourName", name="name" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="yourMobile" class="col-sm-2 col-form-label">Your Mobile number</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="yourMobile", name="phoneNumber" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="yourUsername" class="col-sm-2 col-form-label">User Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="yourUsername", name="username" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="yourPassword" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="yourPassword" name="password" required>
+        </div>
+      </div>
+
+      <fieldset class="row mb-3">
+        <legend class="col-form-label col-sm-2 pt-0">User Type</legend>
+        <div class="col-sm-10">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="True" checked>
+            <label class="form-check-label" for="gridRadios1">Common User</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="False">
+            <label class="form-check-label" for="gridRadios2">Admin User</label>
+          </div>
+        </div>
+      </fieldset>
+        
+      <div class="text-center mb-3">
+        <button type="submit" class="btn btn-success">Add User</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+      </div>
+
+      <div class="col-12">
+        {% if errorMassage != " " %}
+          {% if errorMassage == "User added successfully."%}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <i class="bi bi-check-circle me-1"></i>
+              {{ errorMassage }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% else %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-octagon me-1"></i>
+                {{ errorMassage }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </form>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block head%}
+<title>AGRISAGE / Weather Forecast</title>
+{% endblock%}
+
+{% block main%}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Weather Forecast</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg">
+        <div class="row">
+          <!-- Date Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card date-card">
+              <div class="card-body">
+                <h5 class="card-title">Date </h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-calendar-date"></i>
+                  </div>
+                  <div class="ps-3">
+                      <h6>{{ currentDate }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Date Card -->
+
+          <!-- Time Card -->
+          <div class="col-xxl-4 col-md-6">
+              <div class="card info-card time-card">
+                  <div class="card-body">
+                      <h5 class="card-title">Time</h5>
+                      <div class="d-flex align-items-center">
+                          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                              <i class="bi bi-clock"></i>
+                          </div>
+                          <div class="ps-3">
+                              <h6>{{ currentTime }}</h6>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- End Time Card -->
+
+          <!-- Location Card -->
+          <div class="col-xxl-4 col-md-6">
+              <div class="card info-card location-card">
+                  <div class="card-body">
+                      <h5 class="card-title">Location</h5>
+                      <div class="d-flex align-items-center">
+                          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                              <i class="bi bi-geo-alt-fill"></i>
+                          </div>
+                          <div class="ps-3">
+                              <h6> {{ location }}</h6>
+                              <h6><strong class="str">Longitude : </strong> {{ weatherDataJson['coord']['lon'] }} </h6>
+                              <h6><strong class="str">Latitude : </strong>  {{ weatherDataJson['coord']['lat'] }} </h6>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- End Location Card -->
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Weather <span>| Today</span></h5>
+                <!-- Weather Accordion -->
+                <div class="accordion" id="accordionExample">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          Weather Description : {{ weatherDataJson['weather'][0]['description'] }}
+                          <div class="d-flex justify-content-end">
+                            <img src="https://openweathermap.org/img/wn/{{ weatherDataJson['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                          </div>
+                      </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                              <h6><strong>Temperature : </strong> {{ weatherDataJson['main']['temp'] }} &#x2103; </h6>
+                              <h6><strong>Maximum Temperature : </strong> {{ weatherDataJson['main']['temp_max'] }} &#x2103; </h6>
+                              <h6><strong>Minimum Temperature : </strong> {{ weatherDataJson['main']['temp_min'] }} &#x2103; </h6>
+                              <h6><strong>Humidity : </strong> {{ weatherDataJson['main']['humidity'] }} % </h6>
+                              <h6><strong>Pressure : </strong> {{ weatherDataJson['main']['pressure'] }} hPa </h6>
+                              <h6><strong>Atmospheric pressure on the ground level : </strong> {{ weatherDataJson['main']['grnd_level'] }} hPa </h6>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Wind</button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                              <h6><strong>Wind Speed : </strong> {{ weatherDataJson['wind']['speed'] }} meter/sec </h6>
+                              <h6><strong>Wind Gust : </strong> {{ weatherDataJson['wind']['gust'] }} meter/sec </h6>
+                              <h6><strong>Visibility : </strong> {{ weatherDataJson['visibility'] }} meter </h6>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Air Pollution</button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                        <h6><strong>Air Quality Index : </strong> {{ airPollutionDataJson['list'][0]['main']['aqi'] }} </h6>
+                        <h6><strong>Сoncentration of CO : </strong> {{ airPollutionDataJson['list'][0]['components']['co'] }} μg/m3 </h6>
+                        <h6><strong>Сoncentration of NO : </strong> {{ airPollutionDataJson['list'][0]['components']['no'] }} μg/m3 </h6>
+                        <h6><strong>Сoncentration of NO2 : </strong> {{ airPollutionDataJson['list'][0]['components']['no2'] }} μg/m3 </h6>
+                        <h6><strong>Сoncentration of O3 : </strong> {{ airPollutionDataJson['list'][0]['components']['o3'] }} μg/m3 </h6>
+                        <h6><strong>Сoncentration of SO2 : </strong> {{ airPollutionDataJson['list'][0]['components']['so2'] }} μg/m3 </h6>
+                        <h6><strong> Сoncentration of PM2.5  : </strong> {{ airPollutionDataJson['list'][0]['components']['pm2_5'] }} μg/m3 </h6>
+                        <h6><strong>Сoncentration of PM10 : </strong> {{ airPollutionDataJson['list'][0]['components']['pm10'] }} μg/m3 </h6>
+                        <h6><strong>Сoncentration of NH3 : </strong> {{ airPollutionDataJson['list'][0]['components']['nh3'] }} μg/m3 </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Today weather Accordion Example -->
+            </div>
+          </div>
+
+          {% if weatherForecastJson %}
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Weather Forecast</h5>
+                
+                <!-- Weather Forecast Accordion -->
+                <div class="accordion" id="weatherForecast">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                        {{ weatherForecastJson['list'][0]['dt_txt'] }}
+                        {{ weatherForecastJson['list'][0]['weather'][0]['description'] }}
+                        <div class="d-flex justify-content-end">
+                          <img src="https://openweathermap.org/img/wn/{{ weatherForecastJson['list'][0]['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingFour" data-bs-parent="#weatherForecast">
+                      <div class="accordion-body">
+                        <h6><strong>Temperature : </strong> {{ weatherForecastJson['list'][0]['main']['temp'] }} &#x2103; </h6>
+                        <h6><strong>Humidity : </strong> {{ weatherForecastJson['list'][0]['main']['humidity'] }} % </h6>
+                        <h6><strong>Wind Speed :  </strong> {{ weatherForecastJson['list'][0]['wind']['speed'] }} meter/sec </h6>
+                        <h6><strong>Wind Gust :  </strong> {{ weatherForecastJson['list'][0]['wind']['gust'] }} meter/sec </h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        {{ weatherForecastJson['list'][5]['dt_txt'] }}
+                        {{ weatherForecastJson['list'][5]['weather'][0]['description'] }}
+                        <div class="d-flex justify-content-end">
+                          <img src="https://openweathermap.org/img/wn/{{ weatherForecastJson['list'][5]['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#weatherForecast">
+                      <div class="accordion-body">
+                        <h6><strong>Temperature : </strong> {{ weatherForecastJson['list'][5]['main']['temp'] }} &#x2103; </h6>
+                        <h6><strong>Humidity : </strong> {{ weatherForecastJson['list'][5]['main']['humidity'] }} % </h6>
+                        <h6><strong>Wind Speed :  </strong> {{ weatherForecastJson['list'][5]['wind']['speed'] }} meter/sec </h6>
+                        <h6><strong>Wind Gust :  </strong> {{ weatherForecastJson['list'][5]['wind']['gust'] }} meter/sec </h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSix">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        {{ weatherForecastJson['list'][11]['dt_txt'] }}
+                        {{ weatherForecastJson['list'][11]['weather'][0]['description'] }}
+                        <div class="d-flex justify-content-end">
+                          <img src="https://openweathermap.org/img/wn/{{ weatherForecastJson['list'][11]['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#weatherForecast">
+                      <div class="accordion-body">
+                        <h6><strong>Temperature : </strong> {{ weatherForecastJson['list'][11]['main']['temp'] }} &#x2103; </h6>
+                        <h6><strong>Humidity : </strong> {{ weatherForecastJson['list'][11]['main']['humidity'] }} % </h6>
+                        <h6><strong>Wind Speed :  </strong> {{ weatherForecastJson['list'][11]['wind']['speed'] }} meter/sec </h6>
+                        <h6><strong>Wind Gust :  </strong> {{ weatherForecastJson['list'][11]['wind']['gust'] }} meter/sec </h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSeven">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        {{ weatherForecastJson['list'][17]['dt_txt'] }}
+                        {{ weatherForecastJson['list'][17]['weather'][0]['description'] }}
+                        <div class="d-flex justify-content-end">
+                          <img src="https://openweathermap.org/img/wn/{{ weatherForecastJson['list'][17]['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#weatherForecast">
+                      <div class="accordion-body">
+                        <h6><strong>Temperature : </strong> {{ weatherForecastJson['list'][17]['main']['temp'] }} &#x2103; </h6>
+                        <h6><strong>Humidity : </strong> {{ weatherForecastJson['list'][17]['main']['humidity'] }} % </h6>
+                        <h6><strong>Wind Speed :  </strong> {{ weatherForecastJson['list'][17]['wind']['speed'] }} meter/sec </h6>
+                        <h6><strong>Wind Gust :  </strong> {{ weatherForecastJson['list'][17]['wind']['gust'] }} meter/sec </h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingEight">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                        {{ weatherForecastJson['list'][23]['dt_txt'] }}
+                        {{ weatherForecastJson['list'][23]['weather'][0]['description'] }}
+                        <div class="d-flex justify-content-end">
+                          <img src="https://openweathermap.org/img/wn/{{ weatherForecastJson['list'][23]['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#weatherForecast">
+                      <div class="accordion-body">
+                        <h6><strong>Temperature : </strong> {{ weatherForecastJson['list'][23]['main']['temp'] }} &#x2103; </h6>
+                        <h6><strong>Humidity : </strong> {{ weatherForecastJson['list'][23]['main']['humidity'] }} % </h6>
+                        <h6><strong>Wind Speed :  </strong> {{ weatherForecastJson['list'][23]['wind']['speed'] }} meter/sec </h6>
+                        <h6><strong>Wind Gust :  </strong> {{ weatherForecastJson['list'][23]['wind']['gust'] }} meter/sec </h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingNine">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                        {{ weatherForecastJson['list'][29]['dt_txt'] }}
+                        {{ weatherForecastJson['list'][29]['weather'][0]['description'] }}
+                        <div class="d-flex justify-content-end">
+                          <img src="https://openweathermap.org/img/wn/{{ weatherForecastJson['list'][29]['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#weatherForecast">
+                      <div class="accordion-body">
+                        <h6><strong>Temperature : </strong> {{ weatherForecastJson['list'][29]['main']['temp'] }} &#x2103; </h6>
+                        <h6><strong>Humidity : </strong> {{ weatherForecastJson['list'][29]['main']['humidity'] }} % </h6>
+                        <h6><strong>Wind Speed :  </strong> {{ weatherForecastJson['list'][29]['wind']['speed'] }} meter/sec </h6>
+                        <h6><strong>Wind Gust :  </strong> {{ weatherForecastJson['list'][29]['wind']['gust'] }} meter/sec </h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTen">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                        {{ weatherForecastJson['list'][35]['dt_txt'] }}
+                        {{ weatherForecastJson['list'][35]['weather'][0]['description'] }}
+                        <div class="d-flex justify-content-end">
+                          <img src="https://openweathermap.org/img/wn/{{ weatherForecastJson['list'][35]['weather'][0]['icon'] }}@2x.png" class="rounded-circle">
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#weatherForecast">
+                      <div class="accordion-body">
+                        <h6><strong>Temperature : </strong> {{ weatherForecastJson['list'][35]['main']['temp'] }} &#x2103; </h6>
+                        <h6><strong>Humidity : </strong> {{ weatherForecastJson['list'][35]['main']['humidity'] }} % </h6>
+                        <h6><strong>Wind Speed :  </strong> {{ weatherForecastJson['list'][35]['wind']['speed'] }} meter/sec </h6>
+                        <h6><strong>Wind Gust :  </strong> {{ weatherForecastJson['list'][35]['wind']['gust'] }} meter/sec </h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End weather Forecast Accordion Example -->
+              </div>
+            </div>
+            {% endif %}
+        </div>
+        <!-- End Left side columns -->
+      </div>
+    </div>  
+  </section>
+</main>
+<!-- End #main -->
+{% endblock  %}

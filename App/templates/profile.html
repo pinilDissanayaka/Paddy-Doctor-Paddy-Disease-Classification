@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>AGRISAGE / Profile</title>
+
+{%endblock%}
+
+
+{% block main%}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Profile</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Profile</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-4">
+        <div class="card">
+          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+            <h2>{{ session.username }}</h2>
+            {% if status != " " %}
+              {% if status == "Profile update successfully" or status == "Password change successfully" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <i class="bi bi-check-circle me-1"></i>
+                  {{ status }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% else %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <i class="bi bi-exclamation-octagon me-1"></i>
+                    {{ status }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                {% if status == "Your new password is too similar to one of your new password." %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <i class="bi bi-exclamation-octagon me-1"></i>
+                    Can not change password.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+              {% endif %}
+            {% endif %}
+
+    
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-8">
+
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+
+              <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+              </li>
+
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+              </li>
+
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+              </li>
+
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-delete-account">Delete Account</button>
+              </li>
+
+            </ul>
+            <div class="tab-content pt-2">
+
+              <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                <h5 class="card-title">About</h5>
+                
+                <h5 class="card-title">Profile Details</h5>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                  <div class="col-lg-9 col-md-8">{{ name }}</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">User Name</div>
+                  <div class="col-lg-9 col-md-8">{{ session.username }}</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Phone</div>
+                  <div class="col-lg-9 col-md-8">{{ phoneNumber }}</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Location</div>
+                  <div class="col-lg-9 col-md-8">{{ location }}</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Country</div>
+                  <div class="col-lg-9 col-md-8">{{ country }}</div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                <!-- Profile Edit Form -->
+                <form action="{{ url_for("changeProfile")}}" method="POST">
+                  <div class="row mb-3">
+                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="name" type="text" class="form-control" id="fullName" value= "{{ name }}">
+                    </div>
+                  </div>
+                  
+                  <div class="row mb-3">
+                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">User Name</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="username" type="text" class="form-control" id="yourUsername" value= "{{ session.username }}">
+                    </div>
+                  </div>
+                
+
+                  <div class="row mb-3">
+                    <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="country" type="text" class="form-control" id="Country" value="{{ country }}">
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="location" class="col-md-4 col-lg-3 col-form-label">Location</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="location" type="text" class="form-control" id="Location" value="{{ location }}">
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone Number</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="phoneNumber" type="text" class="form-control" id="yourMobile" value="{{ phoneNumber }}">
+                    </div>
+                  </div>
+
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                  </div>
+                </form>
+                <!-- End Profile Edit Form -->
+
+              </div>
+
+              <div class="tab-pane fade pt-3" id="profile-change-password">
+                <!-- Change Password Form -->
+                <form action="{{ url_for("changePassword")}}" method="POST">
+
+                  <div class="row mb-3">
+                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="password" type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="newpassword" type="password" class="form-control" id="newPassword" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="renewpassword" type="password" class="form-control" id="renewPassword" required>
+                    </div>
+                  </div>
+
+                  <div class="text-center">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#changePasswordModel">Change Password</button>
+                    <!-- Change Password Modal -->
+                    <div class="modal fade" id="changePasswordModel" tabindex="-1">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Change Password Model</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            Non omnis incidunt qui sed occaecati magni asperiores est mollitia. Soluta at et reprehenderit. Placeat autem numquam et fuga numquam. Tempora in facere consequatur sit dolor ipsum. Consequatur nemo amet incidunt est facilis. Dolorem neque recusandae quo sit molestias sint dignissimos.
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Change Password</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- Change Password End Modal-->
+                  </div>
+                </form>
+                <!-- End Change Password Form -->
+              </div>
+
+
+              <div class="tab-pane fade pt-3" id="profile-delete-account">
+                <!-- Delete account Form -->
+                <form action="{{url_for("deleteUser")}}" method="POST">
+
+                  <div class="row mb-3">
+                    <label for="password" class="col-md-4 col-lg-3 col-form-label">Password</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="password" type="password" class="form-control" id="password" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="rePassword" class="col-md-4 col-lg-3 col-form-label">Re-enter Password</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="rePassword" type="password" class="form-control" id="rePassword" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="form-check">
+                      <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                      <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
+                      <div class="invalid-feedback">You must agree before submitting.</div>
+                    </div>
+                  </div>
+                  
+                  <div class="text-center">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#deleteAccountModel"><i class="bi bi-exclamation-triangle">Delete Account</i></button>
+                    <!--Delete Account Modal -->
+                    <div class="modal fade" id="deleteAccountModel" tabindex="-1">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Delete Account</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Delete Account</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Delete Account Modal-->
+                  </div>
+                </form>
+                <!-- End Delete Account Form -->
+            </div>
+            <!-- End Bordered Tabs -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+<!-- End #main -->
+{% endblock  %}
+

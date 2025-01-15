@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>AGRISAGE / Disease Prediction</title>
+{% endblock%}
+
+
+{% block main %}
+<main id="main" class="main">
+
+
+
+  <div class="pagetitle">
+    <h1>Disease Prediction</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/adminDashboard">Home</a></li>
+        <li class="breadcrumb-item active">Disease Prediction</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <div class="col-lg-6">
+        <div>
+          <p class="mb-4">Welcome to our AI-Powered Paddy Disease Prediction System – your digital ally in paddy cultivation. Harnessing the power of artificial intelligence, this platform is designed to elevate your farming experience by accurately diagnosing various paddy diseases and agricultural concerns. Empower yourself with precise insights into your paddy fields' needs. Simply upload a photo, and our advanced AI algorithms will analyze it against a comprehensive database of paddy diseases, providing personalized assessments and tailored recommendations. Discover a new level of confidence and clarity in your farming journey with our AI-driven solution. Your crops deserve the best care, and we're here to provide it. Explore our Paddy Disease Prediction System today and unlock the secrets to a healthy, bountiful harvest.</p>
+          <form method="POST" action="{{ url_for('diseasePrediction') }}" enctype="multipart/form-data" enctype="multipart/form-data">                 
+            <div class="mb-3">
+              <label for="formFile" class="form-label">Click the "Choose File" button to select a photo. Ensure the image is clear and well-lit.</label>
+              <input class="form-control" type="file" id="formFile" name="file" accept="image/*" onchange="loadFile(event)">
+              </br>
+              <div class="col-12">
+                <img class="img-thumbnail" src="" alt="" id="output">
+              </div>
+              <script>
+                var loadFile = function(event) {
+                  var output = document.getElementById('output');
+                  output.src = URL.createObjectURL(event.target.files[0]);
+                  output.onload = function() {
+                    URL.revokeObjectURL(output.src) 
+                  }
+                };
+              </script>
+              </br>
+              <div class="col-12">
+                  <button class="btn btn-primary" type="submit">Upload</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="mb-3">
+          {% if pred != " "%}
+            {% if pred != "normal"%}
+              <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Warning !!</h4>
+                <hr>
+                <p class="mb-0">Disease detected. Review symptoms, causes, and recommended treatments to effectively manage and prevent further crop damage.</p>
+                <hr>
+                <p>{{ pred }}</p>
+                {% if confidence != 0 %}
+                  <p class="mb-0">Confidence : {{ confidence }} %</p>
+                {% endif %}
+              </div>
+            {% else %}
+              <div class="alert alert-success" role="alert">
+                <hr>
+                <p class="mb-0">No disease Detected.</p>
+                <hr>
+                {% if confidence != 0 %}
+                  <p>Confidence : {{ confidence }}</p>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="mb-3">
+          {% if response != 0%}
+              {{response}}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <hr class="hr" />
+
+    <div class="col-lg">
+      <div class="row">
+        {% if recommendedProducts %}
+          {% for recommendedProduct in recommendedProducts %}
+            <!-- recommended Products card-->
+            <div class="col-3">
+              <div class="card">
+                </br>
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="ps-3">
+                      <h6><strong class="str">Fertilizer Name : </strong>  {{ recommendedProduct['fertilizerName'] }} </h6>
+                      <h6><strong class="str">Fertilizer Type : </strong>  {{ recommendedProduct['fertilizerType'] }} </h6>
+                      <h6><strong class="str">Manufacturer : </strong>  {{ recommendedProduct['manufacturer'] }} </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End recommended Products card -->
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block head%}
+<title>AGRISAGE / Dashboard</title>
+
+{% endblock%}
+
+{% block main%}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+          <!-- Date Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card date-card">
+              <div class="card-body">
+                <h5 class="card-title">Date </h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-calendar-date"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ currentDate }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Date Card -->
+
+          <!-- Time Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card time-card">
+              <div class="card-body">
+                <h5 class="card-title">Time</h5>
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-clock"></i>
+                  </div>
+                  <div class="ps-3">
+                    <h6>{{ currentTime }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Time Card -->
+        </div>
+
+
+        <div class='row'>
+          <!-- IoT Card -->
+          {% if iotDevices %}
+            {% for device in iotDevices %}
+              {% if device %}
+                <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card IoT-card">
+                    <div class="filter">
+                      <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                          <h6>Options</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="{{url_for('editIoTDevice', deviceID=device)}}">Edit Device</a></li>
+                      </ul>
+                    </div>
+                    <a href="{{url_for('IoT', deviceID=device)}}">
+                      <div class="card-body">
+                        <h5 class="card-title">Device</h5>
+                        <div class="d-flex align-items-center">
+                          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-cpu"></i>
+                          </div>
+                          <div class="ps-3">
+                            <h6>{{ device }}</h6>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              {% else %}
+                <div class="col-xxl-4 col-md-6">
+                  <div class="card info-card danger-card">
+                    <div class="card-body">
+                      <h5 class="card-title"></h5>
+                      <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                          <i class="bi bi-exclamation"></i>
+                        </div>
+                        <div class="ps-3">
+                          <h6>Couldn't connect IoT device.</h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card danger-card">
+                <div class="card-body">
+                  <h5 class="card-title"></h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-thermometer"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>Couldn't connect IoT device.</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          <!-- End IoT Card -->
+
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card IoT-card">
+              <a href="{{url_for('addIoT')}}">
+                <div class="card-body">
+                  <h5 class="card-title">Add Device</h5>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-plus"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>Add Device</h6>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>   
+        </div>
+      </div>
+      <!-- End Left side columns -->
+    </div>
+  </section>
+</main>
+<!-- End main -->
+{% endblock  %}
+

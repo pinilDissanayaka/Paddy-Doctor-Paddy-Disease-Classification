@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>AGRISAGE / Fertilizers</title>
+{% endblock%}
+
+
+{% block main %}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Fertilizers</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/adminDashboard">Home</a></li>
+        <li class="breadcrumb-item active">Fertilizers</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+  <section class="section dashboard">
+    <div class="col-lg">
+      <div class="row">
+        {% if fertilizers %}
+          {% for fertilizer in fertilizers %}
+            <!-- Fertilizer Card -->
+            <div class="col-3">
+              <div class="card">
+                </br>
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="ps-3">
+                      <h6><strong class="str">Fertilizer Name : </strong>  {{ fertilizer['fertilizerName'] }} </h6>
+                      <h6><strong class="str">Fertilizer Type : </strong>  {{ fertilizer['fertilizerType'] }} </h6>
+                      <h6><strong class="str">Manufacturer : </strong>  {{ fertilizer['manufacturer'] }} </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Fertilizer Card -->
+          {% endfor %}
+        {% else %}
+            product not found
+        {% endif %}
+
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
