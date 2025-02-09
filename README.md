@@ -13,20 +13,20 @@ Diseases and pests can lead to up to **70% loss** in total paddy yield, posing a
 ## 🛠️ **Key Features**
 
 1. **Automated Disease Identification**  
-   Designed to classify over **10 paddy crop diseases** with high accuracy using convolutional neural networks (CNNs) and image processing techniques.
+   - Designed to classify over **10 paddy crop diseases** with high accuracy using convolutional neural networks (CNNs) and image processing techniques.
 
 2. **Improved Diagnosis Efficiency**  
    - **25% faster diagnosis time**  
    - **15% improvement in accuracy** compared to traditional methods.
 
 3. **Comprehensive Decision Support**  
-   Provides actionable insights for crop protection and pest management.
+   - Provides actionable insights for crop protection and pest management.
 
 4. **User-Friendly Interface**  
-   Designed for ease of use by farmers and agricultural workers with minimal technical expertise.
+   - Designed for ease of use by farmers and agricultural workers with minimal technical expertise.
 
 5. **Scalability**  
-   Capable of processing large datasets for diverse agricultural environments.
+   - Capable of processing large datasets for diverse agricultural environments.
 
 ---
 
